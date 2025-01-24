@@ -11,6 +11,7 @@ class User(db.Model):
     Name = db.Column(db.String(50), nullable=False)
     Qualification = db.Column(db.String(10), nullable=False)
     dob = db.Column(Date, nullable=False)
+    Role = db.Column(db.String(10), nullable=False, default='user')
 
 class Subject(db.Model):
     __tablename__ = 'subjects'
