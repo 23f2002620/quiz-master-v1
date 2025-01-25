@@ -24,6 +24,8 @@ class Chapter(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(20), nullable=False)
     Description = db.Column(db.String(50), nullable=True)
+    Subject_id = db.Column(db.Integer, db.ForeignKey('subjects.Id'), nullable=False)
+    subject = db.relationship('Subject', backref='chapters')
 
 class Quiz(db.Model):
     __tablename__ = 'quiz'
