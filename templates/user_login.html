@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Page</title>
+    <title>Login</title>
+    {% block styles %}
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full viewport height */
+            height: 100vh; 
             background-color: #f0f0f0; 
         }
         .login-box {
@@ -16,22 +17,31 @@
             border-radius: 10px; 
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
             text-align: center; 
+
         }
     </style>
+    {% endblock %}
 </head>
 <body>
+    {% block content %}
     <div class="login-box">
         <h2>Welcome to Quiz Master</h2>
         <h2>Login</h2>
-        <form>
+        <form method="POST" action="{{ url_for('login') }}">
+            {% block form %}
             <label for="username">Username (E-mail):</label><br>
             <input type="text" id="username" name="username" required><br><br>
 
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password" required><br><br>
 
-            <button type="submit">Login</button>
+            <button type="submit">Log In</button>
+
+            <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+
+            {% endblock %}
         </form>
     </div>
+    {% endblock %}
 </body>
 </html>
