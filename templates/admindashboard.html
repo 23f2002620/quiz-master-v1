@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% block styles %}
+    <style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <header>QuizMaster</header>
+<h1>
+    <a href = "{{ url_for('quizdashboard') }}">Quiz</a>
+</h1>
+    <h1>Dashboard</h1>
+    <h2>Subjects</h2>
+
+
+    <ul>
+    {% if subjects %}
+        {% for subject in subjects %}
+
+            <h3>{{ subject.Name }}</h3>
+            <p>{{ subject.Description }}</p>
+
+            {% for chapter in chapters %}
+                {% if subject.Id==chapter.Subject_id %}
+                    <h4>{{ chapter.Name }}</h4>
+                    <p>{{ chapter.Description }}</p>
+
+                        <a href = "{{ url_for('editchapter', chapter_id=chapter.Id) }}">Edit Chapter</a>
+
+                        <a href = "{{ url_for('deletechapter', chapter_id=chapter.Id) }}">Delete Chapter</a>
+                    
+                {% endif %}
+            {% endfor %}
+
+            <a href="{{ url_for('createchapter', subject_id=subject.Id) }}">Create Chapter</a>
+
+            <a href = "{{ url_for('editsubject', subject_id=subject.Id) }}">Edit Subject</a>
+
+            <form action = "{{ url_for('deletesubject', subject_id=subject.Id)}}" method = "POST">
+                <button type = "submit">Delete Subject</button>
+        
+        {% endfor %}
+    {% endif %}
+        <ul>
+            <a href="{{ url_for('createsubject') }}">Create Subject</a>
+        </ul>
+    </ul>
+    {% endblock %}
+
+
+</body>
+</html>

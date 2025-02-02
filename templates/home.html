@@ -1,22 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login Page</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;/
-        }
-    </style>
-</head>
-<body>
-    <body>
-        <div class="welcome-box">
-            <h2>Welcome to Quiz Master</h2>
-        </div>
-    </body>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block styles %}
+<!-- {{ super() }} Inherit styles from base.html -->
+<style>
+    body {
+        background-color: #f9f9f9;
+        color: #333;
+    }
+    header {
+        color: rgb(0, 0, 0);
+        text-align: center;
+        padding: 1em 0;
+    }
+    main {
+        text-align: center;
+        margin: 2em 0;
+    }
+    footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 1em;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Welcome to Quiz Master!</h1>
+</header>
+<main>
+    <p>A multi-user app that acts as an exam preparation site for multiple courses.</p>
+
+    <a href="{{ url_for('register') }}">User Register</a>
+
+    <a href="{{ url_for('login') }}">User Login</a>
+
+    <a href = "{{ url_for('adminlogin')}}">Admin Login</a>
+
+</main>
+<footer>
+   <p>&copy; 2025 Quiz Master. All rights reserved.</p>
+</footer>
+{% endblock %}

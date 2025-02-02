@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects</title>
+    {% block styles %}
+    <style>
+        
+
+
+
+
+
+
+        
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <header>
+        QuizMaster
+    </header>
+    <h2>NEW QUIZ</h2>
+    <form method = "POST" >
+        {% block form %}
+        <label for="chapterid">Chapter ID:</label><br>
+        <input type="number" id="chapterid" name="chapterid" required><br><br>
+
+        <label for="date">Date:</label><br>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="duration">Duration:</label>
+        <input type="time" id="duration" name="duration" required><br><br>
+
+        <label for="remarks">Remarks:</label>
+        <input type="text" id="remarks" name="remarks" required><br><br>
+
+        <button type="submit">Submit</button>
+
+        <a href="{{ url_for('quizdashboard') }}" class="button">Cancel</a>
+
+        {% endblock %}
+    </form>
+    {% endblock %}
+</body>
+</html>

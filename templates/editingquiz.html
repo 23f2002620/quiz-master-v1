@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects</title>
+    {% block styles %}
+    <style>
+
+
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <header>
+        QuizMaster
+    </header>
+    <h2>EDIT QUIZ</h2>
+    <form method = 'POST'>
+        {% block form %}
+
+        <label for="date">Date:</label><br>
+        <input type="date" id="quiz_date" name="date" required><br><br>
+
+        <label for="duration">Duration:</label>
+        <input type="time" id="duration" name="duration" required><br><br>
+
+        <label for="remarks">Remarks:</label>
+        <input type="text" id="remarks" name="remarks" required><br><br>
+
+        <button type="submit">Submit</button>
+        {% endblock %}
+    </form>
+    {% endblock %}
+</body>
+</html>

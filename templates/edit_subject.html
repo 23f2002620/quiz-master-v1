@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Subject</title>
+    {% block styles %}
+    <style>
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <header>
+        QuizMaster
+    </header>
+    <h2>EDIT SUBJECT</h2>
+    <form method="POST" action = "{{ url_for('editsubject', subject_id=subject.Id) }}">
+    
+    {% block form %}
+
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" value="{{subject.Name}}" required><br><br>
+
+    <label for="description">Description:</label><br>
+    <input type="text" id="description" name="description" value="{{subject.Description}}" required><br><br>
+
+    <button type="submit">Update</button>
+
+    <a href="{{ url_for('admin_dashboard') }}" class="button">Cancel</a>
+    
+    {% endblock %}
+    </form>
+    {% endblock %}
+</body>
+</html>

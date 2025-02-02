@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% block styles %}
+    <style>
+
+
+
+
+
+
+
+
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <header>QuizMaster</header>
+    <h1>Quiz</h1>
+ <table>
+    <tr>
+    {% if chapter %}
+        {% for c in chapter %}
+
+            <p>{{ c.Name }}</p>
+</tr>
+<tr>
+                {% for q in quiz %}
+                {% if c.Id==q.Chapter_id %}
+
+<td>                <a href = "{{ url_for('quiz', quiz_id = q.Id) }}">q.Id - {{ q.Id }}</a>                                             </td>    
+<td>                <p>Chapter ID - {{ q.Chapter_id }}</p>                                </td>   
+<td>                <p> Date - {{ q.dateofquiz }}</p>                                     </td> 
+<td>                <p>Duration - {{ q.timeduration }} </p>                               </td>    
+<td>                <p>Remarks - {{ q.remarks }}</p>                                      </td>    
+<td>                <a href = "{{ url_for('editquiz', quiz_id = q.Id) }}">Edit</a>        </td>
+<td>                <a href="{{ url_for('deletequiz', quiz_id = q.Id) }}">Delete</a>       </td>
+
+                {% endif %}
+                {% endfor %}
+</tr>
+
+        {% endfor %}
+    {% endif %}
+</table>
+    <a href = "{{ url_for('createquiz')}}">Create Quiz</a>
+
+
+    {% endblock %}
+</body>
+</html>

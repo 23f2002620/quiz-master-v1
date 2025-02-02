@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Subject</title>
+    {% block styles %}
+    <style>
+
+
+
+
+
+
+
+
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <header>
+        QuizMaster
+    </header>
+    <h2>NEW SUBJECT</h2>
+    <form method="POST" action="{{ url_for('createsubject') }}">
+        {% block form %}
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="description">Description:</label><br>
+        <input type="text" id="description" name="description" required><br><br>
+
+        <button type="submit">Submit</button>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="button">Cancel</a>
+
+        {% endblock %}
+    </form>
+    {% endblock %}
+</body>
+</html>
