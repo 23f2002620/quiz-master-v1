@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Date
+from sqlalchemy import Date, DateTime
 
 db = SQLAlchemy()
 
@@ -18,6 +18,7 @@ class Subject(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(20), nullable=False, unique=True)
     Description = db.Column(db.String(60), nullable=True)
+    chapter = db.relationship('Chapter', backref='Subject')
 
 class Chapter(db.Model):
     __tablename__ = 'chapters'
@@ -25,24 +26,25 @@ class Chapter(db.Model):
     Name = db.Column(db.String(20), nullable=False)
     Description = db.Column(db.String(50), nullable=True)
     Subject_id = db.Column(db.Integer, db.ForeignKey('subjects.Id'), nullable=False)
-    subject = db.relationship('Subject', backref='chapters')
+    quiz = db.relationship('Quiz', backref='Chapter')
 
 class Quiz(db.Model):
     __tablename__ = 'quiz'
     Id = db.Column(db.Integer, primary_key=True, unique=True)
     Chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.Id'), nullable=False)
-    dateofquiz = db.Column(db.Date, nullable=False)
-    timeduration = db.Column(db.DateTime, nullable=False)
+    dateofquiz = db.Column(Date, nullable=False)
+    timeduration = db.Column(db.Time, nullable=False)
     remarks = db.Column(db.String(200), nullable=True)
-    chapter = db.relationship('Chapter', backref='quiz')
+    questions = db.relationship('Questions', backref='Quiz')
+    scores = db.relationship('Scores', backref='Quiz')
 
 class Questions(db.Model):
     __tablename__ = 'questions'
     Id = db.Column(db.Integer, primary_key=True)
     Quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.Id'), nullable=False)
     Question = db.Column(db.String(200), nullable=False)
-    Options = db.Column(db.String(100), nullable=False)
-    quiz = db.relationship('Quiz', backref='questions')
+    Options = db.Column(db.String(300), nullable=False)
+    Answer = db.Column(db.Integer, nullable = True)
 
 class Scores(db.Model):
     __tablename__='scores'
@@ -51,5 +53,3 @@ class Scores(db.Model):
     User_id = db.Column(db.Integer, db.ForeignKey('users.Id'), nullable=False)
     Timestampofattempt = db.Column(db.DateTime, nullable=False)
     Totalscored = db.Column(db.Integer, nullable=False)
-    quiz = db.relationship('Quiz', backref='scores')
-    user = db.relationship('User', backref='scores')
