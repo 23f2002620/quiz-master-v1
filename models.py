@@ -43,10 +43,7 @@ class Questions(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
     Quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.Id'), nullable=False)
     Question = db.Column(db.String(200), nullable=False)
-    Option1 = db.Column(db.String(300), nullable=False)
-    Option2 = db.Column(db.String(300), nullable=False)
-    Option3 = db.Column(db.String(300), nullable=False)
-    Option4 = db.Column(db.String(300), nullable=False)
+    Options = db.Column(db.String(300), nullable=False)
     Answer = db.Column(db.Integer, nullable = True)
 
 class Scores(db.Model):
