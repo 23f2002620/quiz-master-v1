@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <h1>QuizMaster</h1>
+    <h2>USER DASHBOARD</h2>
+    
+    {% if subjects %}
+        {% for subject in subjects %}
+
+            <h3>{{ subject.Name }}</h3>
+            <p> {{ subject.Description }}</p>
+
+            {% if chapters %}
+                {% for chapter in chapters %}
+
+                    {% if subject.Id == chapter.Subject_id %}
+
+                    <h4>{{ chapter.Name }}</h4>
+                    <p> {{ chapter.Description }}</p>
+
+                    <table>
+                        <tr>
+                            <th>Date of Quiz</th>
+                            <th>Time Duration</th>
+                        </tr>
+
+                        {% if quiz %}
+                            {% for q in quiz %}
+
+                                {% if chapter.Id == q.Chapter_id %}
+                                <tr>
+                                    <td> {{ q.dateofquiz }} </td>
+                                    <td> {{ q.timeduration }} </td>
+                                    <td><a href="{{ url_for('viewquiz', quiz_id=q.Id )}}">View</a></td>
+                                    <td> <a href="{{ url_for('quizattempt', quiz_id= q.Id )}}">Attend</a></td>
+
+                                </tr>
+
+                                {% endif %}
+
+                            {% endfor %}
+                        {% endif %}
+
+                    </table>
+
+                    {% endif %}
+
+                {% endfor %}
+            {% endif %}
+
+        {% endfor %}
+    {% endif %}
+
+
+</body>
+</html>

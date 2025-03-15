@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+
+
+
+
+
+
+
+        
+    </style>
+</head>
+<body>
+    <h1>QuizMaster</h1>
+
+    <h2>Attempt Quiz</h2>
+
+    {% if questions %}
+
+        <form method="POST">
+
+            {% for q in questions %}
+
+                <h3>{{ q.Question }}</h3>
+
+                {% for option in q.Options.split(',') %}
+                        
+                            <input type="radio" name="{{ q.Id }}" value="{{ loop.index }}">
+                            {{ option.strip() }}
+                        
+                {% endfor %}
+
+            {% endfor %}
+
+            <input type="submit" value="Submit">
+            
+        </form>
+
+    {% endif %}
+    
+</body>
+</html>

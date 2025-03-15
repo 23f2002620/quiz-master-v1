@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+
+
 from models import db, User, Subject, Chapter, Quiz, Questions, Scores
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -65,7 +67,24 @@ def adminlogin():
 
 
 @app.route('/login', methods = ['GET','POST'])
+
+
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User.query.filter_by(Username = username, Role = 'user').first()
+
+        if user and check_password_hash(user.Password, password):
+            session['user_id'] = user.Id
+            session['role'] = user.Role  
+            flash('Login Successfull!')
+            return redirect(url_for('user_dashboard'))  
+        else:
+            flash('Incorrect or Invaild Credentials')
+            return redirect(url_for('/'))
+        
     return render_template('user_login.html')
 
 
@@ -317,7 +336,7 @@ def createques(quiz_id):
 
     if request.method == 'POST':
         question = request.form['question']
-        options = request.form['Options']
+        options = request.form['options']
         answer = request.form['answer']
 
         question = Questions(Quiz_id = quiz_id, Question = question, Options = options, Answer = answer)
@@ -338,7 +357,7 @@ def editques(ques_id):
     question = Questions.query.get_or_404(ques_id)
     if request.method == 'POST':
         question1 = request.form['question']
-        options = request.form['Options']
+        options = request.form['options']
         answer = request.form['answer']
 
         question.Question = question1
@@ -365,27 +384,67 @@ def deleteques(ques_id):
     return redirect(url_for('quiz', quiz_id = question.Quiz_id))
 
 
+@app.route('/user_dashboard', methods = ['GET','POST'])
+def user_dashboard():
+
+    if 'user_id' in session and session.get('role') == 'user':
+        subjects = Subject.query.all()
+        chapters = Chapter.query.all()
+        quiz = Quiz.query.all()
+
+        return render_template('userdashboard.html', subjects = subjects, chapters = chapters, quiz = quiz)
+
+    else:
+        flash('Access denied. LOGIN.')
+        return redirect(url_for('login'))
 
 
+@app.route('/quizattempt/<int:quiz_id>', methods = ["GET", "POST"])
+
+def quizattempt(quiz_id):
+
+    if 'user_id' not in session and session.get('role') != 'user':
+        flash('Access denied. LOGIN.')
+        return redirect(url_for('login'))
+
+    quiz = Quiz.query.get_or_404(quiz_id)
+    questions = Questions.query.filter_by(Quiz_id = quiz_id).all()
+
+    if request.method == 'POST':
+        score = 0
+        for question in questions:
+            answer = request.form.get(str(question.Id))
+            if answer == str(question.Answer):
+                score += 1
+
+        user_id = session.get('user_id')
+        score = Scores(Quiz_id = quiz_id, User_id = user_id, Timestampofattempt = datetime.now(), Totalscored = score)
+        db.session.add(score)
+        db.session.commit()
+        flash('Quiz Attempted Successfully')
+        return redirect(url_for('user_dashboard'))
+    return render_template('quizattempt.html', quiz = quiz, questions = questions)
 
 
+@app.route('/viewquiz/<int:quiz_id>', methods = ["GET", "POST"])
 
+def viewquiz(quiz_id):
 
+    if 'user_id' not in session and session.get('role') != 'user':
+        flash('Access denied. LOGIN.')
+        return redirect(url_for('login'))
+    
+    quiz = Quiz.query.get_or_404(quiz_id)
+    questions = Questions.query.filter_by(Quiz_id = quiz_id).all()
+    q = db.session.query(Questions).count()
 
+    return render_template('viewquiz.html', quiz = quiz, questions = questions, q = q)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.route('/summaryuser', methods = ["GET", "POST"])
+def summaryuser():
+    if 'user_id' not in session and session.get('role') != 'user':
+        flash("Access Denied. LOGIN.")
+        return redirect(url_for('login'))
 
 
 
