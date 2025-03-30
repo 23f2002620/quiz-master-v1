@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-
-
 from models import db, User, Subject, Chapter, Quiz, Questions, Scores
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, time
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import io
+import base64
 
 app = Flask(__name__)
 
@@ -23,8 +26,7 @@ def setup_admin():
 
 @app.route("/")
 def home():
-    return render_template("home.html")
-
+    return render_template("base.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -61,14 +63,12 @@ def adminlogin():
             return redirect(url_for('admin_dashboard'))  
         else:
             flash('Admin ONLY')
-            return redirect(url_for('/'))
+            return redirect(url_for('home'))
 
     return render_template('adminlogin.html')
 
 
 @app.route('/login', methods = ['GET','POST'])
-
-
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -83,7 +83,7 @@ def login():
             return redirect(url_for('user_dashboard'))  
         else:
             flash('Incorrect or Invaild Credentials')
-            return redirect(url_for('/'))
+            return redirect(url_for('home'))
         
     return render_template('user_login.html')
 
@@ -391,9 +391,10 @@ def user_dashboard():
         subjects = Subject.query.all()
         chapters = Chapter.query.all()
         quiz = Quiz.query.all()
-
-        return render_template('userdashboard.html', subjects = subjects, chapters = chapters, quiz = quiz)
-
+        score = Scores.query.filter_by(User_id = session.get('user_id')).all()
+        for q in quiz :
+            scores = [s for s in score if s.Quiz_id == q.Id]
+        return render_template('userdashboard.html', subjects = subjects, chapters = chapters, quiz = quiz, scores = scores)
     else:
         flash('Access denied. LOGIN.')
         return redirect(url_for('login'))
@@ -436,21 +437,154 @@ def viewquiz(quiz_id):
     
     quiz = Quiz.query.get_or_404(quiz_id)
     questions = Questions.query.filter_by(Quiz_id = quiz_id).all()
-    q = db.session.query(Questions).count()
-
+    quiza = Quiz.query.get(quiz_id)
+    q = len(quiza.questions)
     return render_template('viewquiz.html', quiz = quiz, questions = questions, q = q)
+
+@app.route('/quizmanagement', methods = ['GET','POST'])
+def quizmanagement():
+    if 'user_id' not in session and session.get('role') != 'user':
+        flash('Access denied. LOGIN.')
+        return redirect(url_for('login'))
+
+    questions = Questions.query.all()
+    Score = Scores.query.filter_by(User_id = session.get('user_id')).all() 
+    qu = {}
+    for q in questions:
+        quiz_id = q.Quiz_id
+        if quiz_id not in qu:
+            qu[quiz_id] = db.session.query(Questions).filter(Questions.Quiz_id == quiz_id).count()   
+    return render_template('quizmanagement.html', questions = questions, Score = Score, qu = qu)
+
+
+@app.route('/summaryadmin', methods = ["GET", "POST"])
+def summaryadmin():
+    if 'user_id' not in session and session.get('role') != 'user':
+        flash("Access Denied. LOGIN.")
+        return redirect(url_for('login'))
+    
+    
+    scores = Scores.query.all()
+    barlabels = []
+    barvalues = []
+    for score in scores:
+        barlabels.append(score.User_id)
+        barvalues.append(score.Totalscored)
+
+    plt.figure(figsize=(10, 6))
+    x_positions = range(len(barlabels))
+    plt.bar(x_positions, barvalues, color='skyblue')
+    plt.xlabel('Users')
+    plt.ylabel('Scores')
+    plt.xticks(x_positions, barlabels, rotation=45)
+    plt.tight_layout()
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    base64_image = base64.b64encode(img.getvalue()).decode('utf-8')
+    plt.close()
+    
+    barchart = base64_image
+
+    return render_template('admin_summary.html', barchart=barchart)
+
 
 @app.route('/summaryuser', methods = ["GET", "POST"])
 def summaryuser():
     if 'user_id' not in session and session.get('role') != 'user':
         flash("Access Denied. LOGIN.")
         return redirect(url_for('login'))
+    
+    scores = Scores.query.filter_by(User_id = session.get('user_id')).all()
+    barlabels = []
+    barvalues = []
+    for score in scores:
+        barlabels.append(score.Quiz_id)
+        barvalues.append(score.Totalscored)
+    
+    plt.figure(figsize=(10, 6))
+    x_positions = range(len(barlabels))
+    plt.bar(x_positions, barvalues, color='skyblue')
+    plt.xlabel('QuizId')
+    plt.ylabel('Scores')
+    plt.xticks(x_positions, barlabels, rotation=45)
+    plt.tight_layout()
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    base64_image = base64.b64encode(img.getvalue()).decode('utf-8')
+    plt.close()
+    bar_chart = base64_image
+    return render_template('user_summary.html',bar_chart = bar_chart)
+
+@app.route('/searcha', methods = ['GET'])
+def searcha():
+    if 'user_id' not in session and session.get('role') != 'user':
+        flash("Access Denied. LOGIN.")
+        return redirect(url_for('login'))
+    
+    search_query = request.args.get('q', '').strip()
+    results = {'users': [],'subjects': [],'scores': []}
+
+    if search_query:
+        results['users'] = User.query.filter((User.Username.ilike(f'%{search_query}%')) |(User.Name.ilike(f'%{search_query}%'))).all()
+
+        results['subjects'] = Subject.query.filter(Subject.Name.ilike(f'%{search_query}%')).all()
+
+        if search_query.isdigit():
+            results['scores'] = Scores.query.filter(Scores.User_id == int(search_query)).all()
+
+    return render_template('searchadmin.html', results=results, query=search_query)
+    
+@app.route('/searchu', methods = ['GET'])
+def searchu():
+    if 'user_id' not in session and session.get('role') != 'admin':
+        flash("Access Denied. LOGIN.")
+        return redirect(url_for('login'))
+    
+    search_query = request.args.get('q', '').strip()
+    results = {'subjects': [], 'scores': []}
+
+    if search_query:
+        results['subjects'] = Subject.query.filter(
+            Subject.Name.ilike(f'%{search_query}%')).all()
+
+        if search_query.isdigit():
+            results['scores'] = Scores.query.filter(
+                Scores.User_id == int(search_query)).all()
+
+    return render_template('searchuser.html', results=results, query=search_query)
 
 
+@app.route('/logoutu')
+def logoutu():
+    session.pop('user_id', None)
+    session.pop('role', None)
+    flash('Logout Successful')
+    return redirect(url_for('home'))
 
 
+@app.route('/users',methods=['GET','POST'])
+def users():
+    if 'user_id' not in session and session.get('role') != 'admin':
+        flash("Access Denied. LOGIN.")
+        return redirect(url_for('login'))
+    
+    users=User.query.all()
+    return render_template('admin_users.html',users = users)
 
 
+@app.route('/deleteuser/<int:user_id>', methods = ['GET','POST'])
+def deleteuser(user_id):
+    if 'user_id' not in session and session.get('role') != 'admin':
+        flash("Access Denied. LOGIN.")
+        return redirect(url_for('login'))
+    
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("User Deleted Successfully")
+    return redirect(url_for('admin_dashboard'))
 
 with app.app_context():
     db.create_all()
