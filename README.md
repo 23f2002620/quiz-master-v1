@@ -53,7 +53,8 @@ python app.py
 2.Open your web browser and go to http://localhost:5000 to access the application.
 
 
-Contact
+## Contact
+
 Saravanan
 23f2002620@ds.study.iitm.ac.in
 
