@@ -1,72 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    {% block styles %}
-    <style>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </style>
-    {% endblock %}
-</head>
+{% extends "ADMINUpsetting.html" %}
 <body>
     {% block content %}
-    <header>QuizMaster</header>
-<h1>
-    <a href = "{{ url_for('quizdashboard') }}">Quiz</a>
-</h1>
-    <h1>Dashboard</h1>
-    <h2>Subjects</h2>
+
+    <div class="container">
+        <div class="row justify-content-center">
 
 
-    <ul>
-    {% if subjects %}
-        {% for subject in subjects %}
-
-            <h3>{{ subject.Name }}</h3>
-            <p>{{ subject.Description }}</p>
-
-            {% for chapter in chapters %}
-                {% if subject.Id==chapter.Subject_id %}
-                    <h4>{{ chapter.Name }}</h4>
-                    <p>{{ chapter.Description }}</p>
-
-                        <a href = "{{ url_for('editchapter', chapter_id=chapter.Id) }}">Edit Chapter</a>
-
-                        <a href = "{{ url_for('deletechapter', chapter_id=chapter.Id) }}">Delete Chapter</a>
-                    
-                {% endif %}
-            {% endfor %}
-
-            <a href="{{ url_for('createchapter', subject_id=subject.Id) }}">Create Chapter</a>
-
-            <a href = "{{ url_for('editsubject', subject_id=subject.Id) }}">Edit Subject</a>
-
-            <form action = "{{ url_for('deletesubject', subject_id=subject.Id)}}" method = "POST">
-                <button type = "submit">Delete Subject</button>
-        
-        {% endfor %}
-    {% endif %}
+<div class="col-6 ">
+  
         <ul>
-            <a href="{{ url_for('createsubject') }}">Create Subject</a>
+            {% if subjects %}
+                {% for subject in subjects %}
+
+                    <div class="container bg-light border my-4 rounded-3 shadow-sm p-3">
+
+                        <div class="row">
+                    
+                            <div class="col">
+
+                                <h3 class="text-center">{{ subject.Name }}</h3>
+                                <p class="text-center">{{ subject.Description }}</p>
+
+                                {% for chapter in chapters %}
+                                    {% if subject.Id==chapter.Subject_id %}
+                                        <h4>{{ chapter.Name }}</h4>
+                                        <p>{{ chapter.Description }}</p>
+
+                                            <a href = "{{ url_for('editchapter', chapter_id=chapter.Id) }} " class="btn bg-white rounded-3 border shadow-sm">Edit Chapter</a>
+
+                                            <a href = "{{ url_for('deletechapter', chapter_id=chapter.Id) }} " class="btn bg-dark text-white rounded-3 border shadow-sm">Delete Chapter</a>
+                                
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+
+                            <a href="{{ url_for('createchapter', subject_id=subject.Id) }}" class="btn bg-white rounded-3 border shadow-sm my-3">Create Chapter</a>
+
+                            <a href = "{{ url_for('editsubject', subject_id=subject.Id) }}" class="btn bg-white rounded-3 border shadow-sm">Edit Subject</a>
+
+                            <a href= "{{ url_for('deletesubject', subject_id=subject.Id)}}" class="btn bg-dark text-white rounded-3 border shadow-sm my-3">Delete Subject</a>
+                        
+                        </div> 
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="text-center">
+                    
+            <a href="{{ url_for('createsubject') }}" class="btn bg-dark text-white rounded-3 border shadow-sm">Create Subject</a>
+        </div>
         </ul>
-    </ul>
+
+    </div>
+        </div>  
+    </div>
     {% endblock %}
-
-
 </body>
-</html>

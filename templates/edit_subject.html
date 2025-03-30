@@ -1,47 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Subject</title>
-    {% block styles %}
-    <style>
-
-
-
-
-
-
-
-
-
-
-
-    </style>
-    {% endblock %}
-</head>
+{% extends "ADMINUpsetting.html" %}
 <body>
     {% block content %}
-    <header>
-        QuizMaster
-    </header>
-    <h2>EDIT SUBJECT</h2>
-    <form method="POST" action = "{{ url_for('editsubject', subject_id=subject.Id) }}">
+
+    <div class="my-3">
+
+        <div class="container-fluid w-25 bg-light border-bottom mb-2 rounded-3 shadow-sm p-3 ">
+            <div class="row p-3">
+                <h2 class="text-center mb-3">Edit Subject</h2>
+
+                    <form method="POST" action = "{{ url_for('editsubject', subject_id=subject.Id) }}">
+
+                        <div class="form-group">
     
-    {% block form %}
+                            <label for="name">Name:</label><br>
+                            <input type="text" class="form-control" id="name" name="name" required><br><br>
 
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" value="{{subject.Name}}" required><br><br>
+                        </div>
 
-    <label for="description">Description:</label><br>
-    <input type="text" id="description" name="description" value="{{subject.Description}}" required><br><br>
+                        <div class="form-group">
 
-    <button type="submit">Update</button>
+                            <label for="description">Description:</label><br>
+                            <input type="text" class="form-control" id="description" name="description" required><br><br>
 
-    <a href="{{ url_for('admin_dashboard') }}" class="button">Cancel</a>
+                        </div>
+
+                        <div class="text-center">
+
+                            <button class="btn btn-dark my-2" type="submit">Update</button>
+
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn bg-white rounded-3 border shadow-sm">Cancel</a>
+                        </div>
     
-    {% endblock %}
-    </form>
+                    </form>
+
+            </div>
+        </div>
+    </div>
+
     {% endblock %}
 </body>
 </html>

@@ -1,47 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-
-
-
-
-
-
-
-
-
-
-    </style>
-</head>
+{% extends "ADMINUpsetting.html" %}
 <body>
-    <h1>QuizMaster</h1>
     {% block content %}
-        <h2>Quiz - {{ quiz_id }}</h2>
+
+    <div class="container w-25 bg-light border my-4 rounded-3 shadow-sm p-3 d-flex justify-content-center">
+
+        <div class="row">
+    
+            <div class="col my-3">
+   
+
+        <h2 class="text-center">Quiz - {{ quiz_id }}</h2>
 
         <table>
             <tr>
-                <th>Question</th>
-                <th>Options</th>
-                <th>Answer</th>
+                <th class="text-center">Question</th>
+                <th class="text-center">Options</th>
+                <th class="text-center">Answer</th>
 
             </tr>
             {% if questions %}
                 {% for q in questions %}
                     <tr>
-                        <td>{{ q.Question }}</td>
-                        <td>{{ q.Options }}</td>
-                        <td>{{ q.Answer }}</td>
-                        <td> <a href="{{ url_for('editques', ques_id = q.Id) }}">Edit</a>    </td>
-                        <td> <a href="{{ url_for('deleteques', ques_id = q.Id) }}">Delete</a> </td>
+                     <div class="my-3">  <td class="text-center">{{ q.Question }}</td></div>
+                     <div class="my-3">    <td class="text-center">{{ q.Options }}</td></div>
+                        <td class="text-center">{{ q.Answer }}</td>
+                        <td> <a href="{{ url_for('editques', ques_id = q.Id) }} "class="btn bg-white rounded-3 border shadow-sm">Edit</a>    </td>
+                        <td> <a href="{{ url_for('deleteques', ques_id = q.Id) }}" class="btn bg-dark text-white rounded-3 border shadow-sm">Delete</a> </td>
                     </tr>
                 {% endfor %}
             {% endif %}
         </table>
-        <a href = "{{ url_for('createques', quiz_id = quiz_id)}}">Create Question</a>
+        <div class="my-3 text-center">
+        <a href = "{{ url_for('createques', quiz_id = quiz_id)}}" class="btn bg-dark text-white rounded-3 border shadow-sm">Create Question</a>
+    </div>
+        </div>
+        </div>
+        </div>
 
     {% endblock %}
 </body>

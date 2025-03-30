@@ -1,0 +1,48 @@
+{% extends "ADMINUpsetting.html" %}
+
+<body>
+    {% block content %}
+    
+        <div class="container w-50 bg-light border-bottom my-4 rounded-3 shadow-sm p-3 d-flex justify-content-center">
+
+            <div class="row">
+        
+                <div class="col">
+
+                    <h2 class="text-center">Users</h2>
+
+                    <table >
+                        <tr>
+                        
+                        
+                            <th class="text-center p-1">        User ID </th> 
+                             <th class="text-center p-1">      Username</th> 
+                            <th class="text-center p-1">Name</th>
+                            <th class="text-center p-1">Qualification</th>
+                            <th class="text-center p-1">Dob</th>
+
+                        </tr>
+
+                    {% if users %}
+                        {% for user in users %}
+                <tr>
+                      <td>  <p class="text-center">{{ user.Id }} </p> </td>
+                      <td>       <p class="text-center">{{ user.Username }}</p></td>
+                      <td>     <p class="text-center">{{ user.Name }}</p></td>
+                      <td>     <p class="text-center">{{ user.Qualification }}</p></td>
+                      <td>    <p class="text-center">{{ user.dob }}</p></td>
+                      <div class="text-center mg">
+                      <td>  <a href="{{ url_for('deleteuser', user_id = user.Id) }}" class="btn bg-dark text-white rounded-3 border shadow-sm">Delete</a>       </td>
+                    </div>
+                </tr>
+                        {% endfor %}
+                    {% endif %}
+              
+                </table>
+           
+                </div>
+
+            </div>
+        </div>
+    {% endblock %}
+</body>

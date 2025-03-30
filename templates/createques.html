@@ -1,38 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create new question</title>
-    <style>
+
+{% extends "ADMINUpsetting.html" %}
 
 
-
-
-
-
-    </style>
-</head>
 <body>
-    
-    <h1>QuizMaster</h1>
-    <h2>Create New Question</h2>
+    {% block content %}
+
+    <div class="my-3">
+       
+
+    <div class="container w-25 bg-light border my-4 rounded-3 shadow-sm p-3 ">
+        <div class="row">
+            <div class="col">
+                <h3 class="text-center">Create Question</h3>
+        
     
     <form method="POST">
+        <div class="form-group">
     
-        <label for="question">Question</label><br>
-        <input type="text" id = "question" name = "question" required ><br><br>
+        <label for="question">Question:</label><br>
+        <input type="text" id = "question" name = "question" class="form-control" required ><br><br>
+    </div>
+    <div class="from-group">
+        <label for="options">Options:</label><br>
+        <input type="text" id = "option1" name = "options" class="form-control" required ><br><br>
+    </div>
+    <div class="form-group">
 
-        <label for="options">Options</label><br>
-        <input type="text" id = "option1" name = "options" required ><br><br>
+        <label for="answer">Answer:</label><br>
+        <input type="text" id = "answer" name = "answer" class="form-control" required ><br><br>
 
+    </div>
+    <div class="text-center">
 
-        <label for="answer">Answer</label><br>
-        <input type="text" id = "answer" name = "answer" required ><br><br>
-
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn btn-dark my-2">Submit</button>
+    </div>
 
     </form>
-    
+    </div>
+    </div>
+    </div>
+
+    {% endblock %}
 </body>
 </html>

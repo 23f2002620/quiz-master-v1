@@ -1,0 +1,47 @@
+{% extends "UserUpsetting.html" %}
+<body>
+    {% block content %}
+    <div class="container w-25 bg-light border-bottom my-4 rounded-3 shadow-sm p-3 ">
+
+        <div class="row">
+    
+            <div class="col">
+
+    <h2 class="text-center">Quiz Scores</h2>
+
+    <table>
+        <tr>
+            <th class="text-center">Quiz Id</th>
+            <th class="text-center">Number of Questions</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Scores</th>
+        </tr>
+        
+            {% if Score %}
+                {% for S in Score %}
+                    {% if questions %}
+                        {% for q in questions %}
+                            <tr>
+                                {% if S.Quiz_id == q.Id %}
+                                    <td class="text-center">{{ S.Quiz_id }}</td>
+                                    <td class="text-center">{{ qu[S.Quiz_id] }}</td>
+                                    <td class="text-center">{{ S.Timestampofattempt.strftime('%d-%m-%Y') }}</td>
+                                    <td class="text-center">{{ S.Totalscored }}/{{ qu[S.Quiz_id] }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    {% endif %}                    
+                {% endfor %}
+            {% endif %}
+    </table>
+
+    </div>
+    
+            </div>
+        </div>
+
+    {% endblock %}
+
+    
+</body>
+</html>

@@ -1,43 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subjects</title>
-    {% block styles %}
-    <style>
+{% extends "ADMINUpsetting.html" %}
 
-
-
-
-
-
-
-
-
-
-    </style>
-    {% endblock %}
-</head>
 <body>
     {% block content %}
-    <header>
-        QuizMaster
-    </header>
-    <h2>NEW CHAPTER</h2>
-    <form method="POST">
+
+
+    <div class="my-3">
+
+        <div class="container-fluid w-25 bg-light border-bottom mb-2 rounded-3 shadow-sm p-3 ">
+            <div class="row p-3">
+                <h2 class="text-center mb-3">New Chapter</h2>
+
+                    <form method="POST">
+
+                        <div class="form-group">
+                        
+                            <label for="name">Name:</label><br>
+                            <input type="text" class="form-control" id="name" name="name" required><br><br>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="description">Description:</label><br>
+                            <input type="text" class="form-control" id="description" name="description" required><br><br>
+                        </div>
+
+                        <div class="text-center">
+
+                            <button class="btn btn-dark my-2" type="submit">Submit</button>
+
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn bg-white rounded-3 border shadow-sm">Cancel</a>
+                        </div>
     
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-
-        <label for="description">Description:</label><br>
-        <input type="text" id="description" name="description" required><br><br>
-
-        <button type="submit">Submit</button>
-
-        <a href="{{ url_for('admin_dashboard') }}" class="button">Cancel</a>
-    
-    </form>
+                    </form>
+            </div>
+        </div>
+    </div>
     {% endblock %}
 </body>
 </html>

@@ -1,43 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        
+{% extends "UserUpsetting.html" %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </style>
-</head>
 <body>
-    <h1>QuizMaster</h1>
-    <h2>USER DASHBOARD</h2>
+    {% block content %}
     
     {% if subjects %}
         {% for subject in subjects %}
+        <div class="container w-25 bg-light border-bottom my-4 rounded-3 shadow-sm p-3 ">
 
-            <h3>{{ subject.Name }}</h3>
-            <p> {{ subject.Description }}</p>
+            <div class="row">
+        
+                <div class="col">
+
+            <h3 class="text-center">{{ subject.Name }}</h3>
+            <p class="text-center"> {{ subject.Description }}</p>
 
             {% if chapters %}
                 {% for chapter in chapters %}
@@ -47,24 +22,32 @@
                     <h4>{{ chapter.Name }}</h4>
                     <p> {{ chapter.Description }}</p>
 
-                    <table>
-                        <tr>
-                            <th>Date of Quiz</th>
-                            <th>Time Duration</th>
-                        </tr>
 
                         {% if quiz %}
+
+                        
                             {% for q in quiz %}
 
                                 {% if chapter.Id == q.Chapter_id %}
-                                <tr>
-                                    <td> {{ q.dateofquiz }} </td>
-                                    <td> {{ q.timeduration }} </td>
-                                    <td><a href="{{ url_for('viewquiz', quiz_id=q.Id )}}">View</a></td>
-                                    <td> <a href="{{ url_for('quizattempt', quiz_id= q.Id )}}">Attend</a></td>
 
-                                </tr>
+                                <table>
+                                    <tr>
+                                        <th>Date of Quiz</th>
+                                        <th>Time Duration</th>
+                                    </tr>
 
+                                    <tr>
+                                        <td> {{ q.dateofquiz }} </td>
+                                        <td> {{ q.timeduration }} </td>
+                                        <td><a href="{{ url_for('viewquiz', quiz_id=q.Id )}}" class="btn bg-white rounded-3 border shadow-sm">View</a></td>
+
+                                            {% if scores %}
+                                                <td>Attended</td>
+                                            {% else %}
+                                                <td> <a href="{{ url_for('quizattempt', quiz_id=q.Id )}}" class="btn bg-dark text-white rounded-3 border shadow-sm">Attend</a></td> 
+                                            {% endif %}
+
+                                    </tr>
                                 {% endif %}
 
                             {% endfor %}
@@ -77,9 +60,15 @@
                 {% endfor %}
             {% endif %}
 
+            </div>
+
+            </div>
+        </div>
+
         {% endfor %}
     {% endif %}
 
+    {% endblock %}
 
 </body>
 </html>
