@@ -11,15 +11,12 @@
                 {% if chapter %}
                     {% for c in chapter %}
 
-                        
-                    {% for q in quiz %}
-                    {% if c.Id==q.Chapter_id %}
+                    
 
-                    <table>
+                    <table class="table table-bordered table-striped table-hover table-responsive">
                         
                         <div class="justify-content-center">
                         <h2 class="text-center bg-dark text-white rounded-3 border shadow-sm my-3">{{ c.Name }}</h2>
-
 
                         <tr class="text-center">
                             <th>Quiz Id</th>
@@ -29,6 +26,12 @@
                             <th>Remarks</th>
 
                         </tr>
+                        
+                    {% for q in quiz %}
+                    {% if c.Id==q.Chapter_id %}
+
+
+                        
             
                                                         <tr class="text-center">
                                                             <td>                <a href = "{{ url_for('quiz', quiz_id = q.Id) }}" class="btn bg-white rounded-3 border shadow-sm">{{ q.Id }}</a>                                             </td>    
@@ -36,7 +39,7 @@
                                                             <td>                <p>{{ q.dateofquiz }}</p>                                     </td> 
                                                             <td>                <p>{{ q.timeduration }} </p>                               </td>    
                                                             <td>                <p>{{ q.remarks }}</p>                                      </td>    
-                                                            <td>                <a href = "{{ url_for('editquiz', quiz_id = q.Id) }}" class="btn bg-white rounded-3 border shadow-sm">Edit</a>        </td>
+                                                            <td>                <a href = "{{ url_for('editquiz', quiz_id = q.Id, chapter_id = c.Id) }}" class="btn bg-white rounded-3 border shadow-sm">Edit</a>        </td>
                                                             <td>                <a href="{{ url_for('deletequiz', quiz_id = q.Id) }}" class="btn bg-dark text-white rounded-3 border shadow-sm">Delete</a>       </td>
                                                         </tr>
                        
@@ -46,18 +49,17 @@
                                 {% endfor %}
                             </div>
                             </table>
-                        
+                            <div class="text-center">
+                            <a href = "{{ url_for('createquiz', chapter_id = c.Id)}}" class="btn bg-dark text-white rounded-3 border shadow-sm">Create Quiz</a>
+
+                        </div>
                     {% endfor %}
                 {% endif %}
             
             </div>
         </div>
     </div>
-<div class="text-center">
-    
-    <a href = "{{ url_for('createquiz')}}" class="btn bg-dark text-white rounded-3 border shadow-sm">Create Quiz</a>
 
-</div>
     {% endblock %}
 </body>
 </html>

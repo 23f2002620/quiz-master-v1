@@ -90,7 +90,6 @@ def login():
 
 @app.route('/admin_dashboard', methods = ['GET','POST'])
 def admin_dashboard():
-
     if 'user_id' in session and session.get('role') == 'admin':
         subjects = Subject.query.all()
         chapters = Chapter.query.all()
@@ -104,7 +103,6 @@ def admin_dashboard():
 
 @app.route('/createsubject', methods = ['GET','POST'])
 def createsubject():
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -123,7 +121,6 @@ def createsubject():
 
 @app.route('/editsubject/<int:subject_id>', methods = ['GET','POST'])
 def editsubject(subject_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -142,7 +139,6 @@ def editsubject(subject_id):
 
 @app.route('/deletesubject/<int:subject_id>', methods = ['GET','POST'])
 def deletesubject(subject_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -168,7 +164,6 @@ def deletesubject(subject_id):
 
 @app.route('/createchapter/<int:subject_id>', methods = ['GET','POST'])
 def createchapter(subject_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -188,7 +183,6 @@ def createchapter(subject_id):
 
 @app.route('/editchapter/<int:chapter_id>', methods = ['GET','POST'])
 def editchapter(chapter_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -207,7 +201,6 @@ def editchapter(chapter_id):
 
 @app.route('/deletechapter/<int:chapter_id>', methods = ['GET','POST'])
 def deletechapter(chapter_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -230,7 +223,6 @@ def deletechapter(chapter_id):
 
 @app.route('/quizdashboard', methods = ['GET','POST'])
 def quizdashboard():
-
     if 'user_id' in session and session.get('role') == 'admin':
         quiz = Quiz.query.all()
         chapter = Chapter.query.all()
@@ -241,15 +233,14 @@ def quizdashboard():
         return redirect(url_for('login'))
 
 
-@app.route('/createquiz', methods =["GET", "POST"])
-def createquiz():
-
+@app.route('/createquiz/<int:chapter_id>', methods =["GET", "POST"])
+def createquiz(chapter_id):
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
     
     if request.method == 'POST':
-        chapterid = request.form['chapterid']
+        chapterid = chapter_id
         date = request.form['date']
         duration = request.form['duration']
         remarks = request.form['remarks']
@@ -263,12 +254,11 @@ def createquiz():
         db.session.commit()
         flash("Quiz Created Successfully")
         return redirect(url_for('quizdashboard'))
-    return render_template('create_quiz.html')
+    return render_template('create_quiz.html', chapter_id = chapter_id)
 
 
-@app.route('/editquiz/<int:quiz_id>', methods = ['GET','POST'])
-def editquiz(quiz_id):
-
+@app.route('/editquiz/chap-<int:chapter_id>/<int:quiz_id>', methods = ['GET','POST'])
+def editquiz(chapter_id,quiz_id):
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -290,13 +280,12 @@ def editquiz(quiz_id):
         db.session.commit()
         flash("Quiz Created Successfully")
         return redirect(url_for('quizdashboard'))
-    return render_template('editingquiz.html')
+    return render_template('editingquiz.html', chapter_id = chapter_id)
 
 
 @app.route('/deletequiz/<int:quiz_id>', methods = ['GET','POST'])
 
 def deletequiz(quiz_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         return redirect(url_for('login'))
@@ -317,7 +306,6 @@ def deletequiz(quiz_id):
 @app.route('/quiz/<int:quiz_id>', methods = ['GET','POST'])
 
 def quiz(quiz_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         redirect(url_for('login'))
@@ -329,7 +317,6 @@ def quiz(quiz_id):
 
 @app.route('/createques/<int:quiz_id>', methods = ['GET','POST'])
 def createques(quiz_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         redirect(url_for('login'))
@@ -349,7 +336,6 @@ def createques(quiz_id):
 
 @app.route('/editques/<int:ques_id>', methods = ['GET', 'POST'])
 def editques(ques_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         redirect(url_for('login'))
@@ -372,7 +358,6 @@ def editques(ques_id):
 
 @app.route('/deleteques/<int:ques_id>', methods = ["GET","POST"])
 def deleteques(ques_id):
-
     if 'user_id' not in session and session.get('role') != 'admin':
         flash('Access denied. Admins only.')
         redirect(url_for('login'))
@@ -386,7 +371,6 @@ def deleteques(ques_id):
 
 @app.route('/user_dashboard', methods = ['GET','POST'])
 def user_dashboard():
-
     if 'user_id' in session and session.get('role') == 'user':
         subjects = Subject.query.all()
         chapters = Chapter.query.all()
@@ -401,9 +385,7 @@ def user_dashboard():
 
 
 @app.route('/quizattempt/<int:quiz_id>', methods = ["GET", "POST"])
-
 def quizattempt(quiz_id):
-
     if 'user_id' not in session and session.get('role') != 'user':
         flash('Access denied. LOGIN.')
         return redirect(url_for('login'))
@@ -428,9 +410,7 @@ def quizattempt(quiz_id):
 
 
 @app.route('/viewquiz/<int:quiz_id>', methods = ["GET", "POST"])
-
 def viewquiz(quiz_id):
-
     if 'user_id' not in session and session.get('role') != 'user':
         flash('Access denied. LOGIN.')
         return redirect(url_for('login'))
@@ -463,7 +443,6 @@ def summaryadmin():
         flash("Access Denied. LOGIN.")
         return redirect(url_for('login'))
     
-    
     scores = Scores.query.all()
     barlabels = []
     barvalues = []
@@ -474,7 +453,7 @@ def summaryadmin():
     plt.figure(figsize=(10, 6))
     x_positions = range(len(barlabels))
     plt.bar(x_positions, barvalues, color='skyblue')
-    plt.xlabel('Users')
+    plt.xlabel('User-Id')
     plt.ylabel('Scores')
     plt.xticks(x_positions, barlabels, rotation=45)
     plt.tight_layout()
@@ -483,9 +462,7 @@ def summaryadmin():
     img.seek(0)
     base64_image = base64.b64encode(img.getvalue()).decode('utf-8')
     plt.close()
-    
     barchart = base64_image
-
     return render_template('admin_summary.html', barchart=barchart)
 
 
@@ -501,7 +478,6 @@ def summaryuser():
     for score in scores:
         barlabels.append(score.Quiz_id)
         barvalues.append(score.Totalscored)
-    
     plt.figure(figsize=(10, 6))
     x_positions = range(len(barlabels))
     plt.bar(x_positions, barvalues, color='skyblue')
@@ -519,40 +495,34 @@ def summaryuser():
 
 @app.route('/searcha', methods = ['GET'])
 def searcha():
-    if 'user_id' not in session and session.get('role') != 'user':
+    if 'user_id' not in session and session.get('role') != 'admin':
         flash("Access Denied. LOGIN.")
         return redirect(url_for('login'))
     
     search_query = request.args.get('q', '').strip()
-    results = {'users': [],'subjects': [],'scores': []}
-
+    results = {'users': [],'subjects': [],'quiz': []}
     if search_query:
         results['users'] = User.query.filter((User.Username.ilike(f'%{search_query}%')) |(User.Name.ilike(f'%{search_query}%'))).all()
 
         results['subjects'] = Subject.query.filter(Subject.Name.ilike(f'%{search_query}%')).all()
 
         if search_query.isdigit():
-            results['scores'] = Scores.query.filter(Scores.User_id == int(search_query)).all()
-
+            results['quiz'] = Quiz.query.filter(Quiz.Id.ilike(f'%{search_query}%')).all()
     return render_template('searchadmin.html', results=results, query=search_query)
     
 @app.route('/searchu', methods = ['GET'])
 def searchu():
-    if 'user_id' not in session and session.get('role') != 'admin':
+    if 'user_id' not in session and session.get('role') != 'user':
         flash("Access Denied. LOGIN.")
         return redirect(url_for('login'))
-    
     search_query = request.args.get('q', '').strip()
     results = {'subjects': [], 'scores': []}
-
     if search_query:
         results['subjects'] = Subject.query.filter(
             Subject.Name.ilike(f'%{search_query}%')).all()
-
         if search_query.isdigit():
             results['scores'] = Scores.query.filter(
                 Scores.User_id == int(search_query)).all()
-
     return render_template('searchuser.html', results=results, query=search_query)
 
 
@@ -569,7 +539,6 @@ def users():
     if 'user_id' not in session and session.get('role') != 'admin':
         flash("Access Denied. LOGIN.")
         return redirect(url_for('login'))
-    
     users=User.query.all()
     return render_template('admin_users.html',users = users)
 
@@ -579,16 +548,17 @@ def deleteuser(user_id):
     if 'user_id' not in session and session.get('role') != 'admin':
         flash("Access Denied. LOGIN.")
         return redirect(url_for('login'))
-    
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
     db.session.commit()
     flash("User Deleted Successfully")
     return redirect(url_for('admin_dashboard'))
 
+
 with app.app_context():
     db.create_all()
     setup_admin()
     
+
 if __name__ == "__main__":
     app.run(debug=True)

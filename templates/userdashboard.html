@@ -5,7 +5,7 @@
     
     {% if subjects %}
         {% for subject in subjects %}
-        <div class="container w-25 bg-light border-bottom my-4 rounded-3 shadow-sm p-3 ">
+        <div class="container w-50 bg-light border-bottom my-4 rounded-3 shadow-sm p-3 ">
 
             <div class="row">
         
@@ -30,7 +30,7 @@
 
                                 {% if chapter.Id == q.Chapter_id %}
 
-                                <table>
+                                <table class="table table-bordered table-striped table-hover text-center mt-3">
                                     <tr>
                                         <th>Date of Quiz</th>
                                         <th>Time Duration</th>
